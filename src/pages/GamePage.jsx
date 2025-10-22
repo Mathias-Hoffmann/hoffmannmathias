@@ -18,17 +18,69 @@ export default function GamePage() {
     const PLACE_GRID = 20;
 
     // Coordonnées natives dans l’espace du SVG (tu peux les remplacer par l'export)
-    const ZONES = [
-  { id: "zone-1", x: 36, y: 108, w: 20, h: 20, title: "", content: "" },
-  { id: "zone-2", x: 8, y: 16, w: 12, h: 16, title: "", content: "" },
-  { id: "zone-3", x: 108, y: 160, w: 20, h: 24, title: "", content: "" },
-  { id: "zone-4", x: 148, y: 96, w: 16, h: 20, title: "", content: "" },
-  { id: "zone-5", x: 216, y: 112, w: 20, h: 20, title: "", content: "" },
-  { id: "zone-6", x: 240, y: 120, w: 8, h: 16, title: "", content: "" },
-  { id: "zone-7", x: 328, y: 116, w: 20, h: 8, title: "", content: "" },
-  { id: "zone-8", x: 380, y: 36, w: 16, h: 16, title: "", content: "" },
-  { id: "zone-9", x: 304, y: 204, w: 16, h: 12, title: "", content: "" },
+const ZONES = [
+  { 
+    id: "zone-1", 
+    x: 36, y: 108, w: 20, h: 20, 
+    title: "High School", 
+    content: "Graduated with honors in science and mathematics. Discovered a passion for engineering and technology through early projects and teamwork." 
+  },
+  { 
+    id: "zone-2", 
+    x: 8, y: 16, w: 12, h: 16, 
+    title: "Sport", 
+    content: "Endurance athlete. Competing in mountain trails, developing discipline, resilience, and team spirit." 
+  },
+  { 
+    id: "zone-3", 
+    x: 108, y: 160, w: 20, h: 24, 
+    title: "Preparatory Class", 
+    content: "Two years of intensive courses in mathematics, physics, and engineering sciences, preparing for entrance to France’s top engineering schools." 
+  },
+  { 
+    id: "zone-4", 
+    x: 148, y: 96, w: 16, h: 20, 
+    title: "London Aerospace", 
+    content: "Research internship in aeronautical design. Explored materials engineering and simulation tools in an international environment." 
+  },
+  { 
+    id: "zone-5", 
+    x: 216, y: 112, w: 20, h: 20, 
+    title: "Engineering School", 
+    content: "Currently studying at IMT Atlantique, one of France’s top engineering schools, specializing in data science and artificial intelligence." 
+  },
+  { 
+    id: "zone-6", 
+    x: 240, y: 120, w: 8, h: 16, 
+    title: "Volvo Group", 
+    content: "Engineering apprentice in production management and innovation. Leading improvement projects in a large industrial environment." 
+  },
+  { 
+    id: "zone-7", 
+    x: 328, y: 116, w: 20, h: 8, 
+    title: "Future", 
+    content: "Aspiring to explore cognitive and brain sciences, combining AI and neuroscience to build technologies that better understand human intelligence." 
+  },
+  { 
+    id: "zone-8", 
+    x: 304, y: 204, w: 16, h: 12, 
+    title: "Music", 
+    content: "Saxophonist for over 10 years. Passionate about jazz, electronic and Techno music. Creativity and emotion as daily sources of inspiration." 
+  },
+
+
+  
+  { 
+    id: "zone-9", 
+    x: 380, y: 36, w: 16, h: 16, 
+    title: "Mountain", 
+    content: "Trail runner and outdoor enthusiast. Regularly hiking and training for ultra-distance events in alpine environments." 
+  },
 ];
+
+
+
+
 
     class MainScene extends Phaser.Scene {
       preload() {
@@ -56,8 +108,11 @@ export default function GamePage() {
         this.viewOffsetY = offsetY;
 
         // Joueur : coordonnées natives -> coordonnées affichées
-        const startX = offsetX + 420 * scale;
-        const startY = offsetY + 760 * scale;
+        const startX = offsetX + 10 * scale;
+        const startY = offsetY + 150 * scale;
+
+
+
         this.player = this.physics.add.sprite(startX, startY, "player", 1)
           .setOrigin(0.5)
           .setScale(0.5 * scale)
