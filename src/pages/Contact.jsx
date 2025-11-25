@@ -174,12 +174,12 @@ export default function Contact() {
             
           }}
         >
-          Rejouer
+          Restart
         </button>
       )}
       
       <p style={{ marginTop: '0.5rem' }}>
-        Appuie sur <b>espace</b> pour sauter !
+        Press the <b>space bar</b> to jump!
       </p>
     </main>
   )

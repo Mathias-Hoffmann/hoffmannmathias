@@ -420,58 +420,72 @@ const ZONES = [
     };
   }, []);
 
-  return (
-    <>
-      <div style={{ background: "#ffffffff", minHeight: "100vh", padding: "24px 0" }}>
-        <div ref={containerRef} />
-      </div>
+ return (
+  <>
+    <div style={{ background: "#ffffffff", minHeight: "100vh", padding: "24px 0" }}>
 
-      {panel && (
+      {/* <<< AJOUT ICI >>> */}
+      <div style={{
+        textAlign: "center",
+        fontFamily: "Press Start 2P, monospace",
+        fontSize: "12px",
+        color: "rgba(255, 107, 181, 1)",
+        marginBottom: "12px"
+      }}>
+        Use the arrow keys to move
+      </div>
+      {/* <<< FIN AJOUT >>> */}
+
+      <div ref={containerRef} />
+    </div>
+
+    {panel && (
+      <div
+        onClick={() => setPanel(null)}
+        style={{
+          position: "fixed",
+          inset: 0,
+          background: "rgba(0,0,0,0.45)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 1000
+        }}
+      >
         <div
-          onClick={() => setPanel(null)}
+          onClick={(e) => e.stopPropagation()}
           style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,0.45)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 1000
+            background: "#fff",
+            color: "#000",
+            border: "2px solid #000",
+            borderRadius: 12,
+            width: 420,
+            maxWidth: "90vw",
+            padding: 20,
+            boxShadow: "6px 6px 0 #000",
+            fontFamily: "Press Start 2P, monospace"
           }}
         >
-          <div
-            onClick={(e) => e.stopPropagation()}
+          <h2 style={{ marginTop: 0, marginBottom: 12 }}>{panel.title}</h2>
+          <p style={{ lineHeight: 1.5, fontSize: 12 }}>{panel.content}</p>
+          <button
+            onClick={() => setPanel(null)}
             style={{
-              background: "#fff",
-              color: "#000",
+              marginTop: 12,
+              padding: "10px 14px",
+              background: "#ff4f81",
+              color: "#fff",
               border: "2px solid #000",
-              borderRadius: 12,
-              width: 420,
-              maxWidth: "90vw",
-              padding: 20,
-              boxShadow: "6px 6px 0 #000",
-              fontFamily: "Press Start 2P, monospace"
+              borderRadius: 10,
+              cursor: "pointer"
             }}
           >
-            <h2 style={{ marginTop: 0, marginBottom: 12 }}>{panel.title}</h2>
-            <p style={{ lineHeight: 1.5, fontSize: 12 }}>{panel.content}</p>
-            <button
-              onClick={() => setPanel(null)}
-              style={{
-                marginTop: 12,
-                padding: "10px 14px",
-                background: "#ff4f81",
-                color: "#fff",
-                border: "2px solid #000",
-                borderRadius: 10,
-                cursor: "pointer"
-              }}
-            >
-              Fermer
-            </button>
-          </div>
+            Fermer
+          </button>
         </div>
-      )}
-    </>
-  );
+      </div>
+    )}
+  </>
+);
+
 }

@@ -1,6 +1,6 @@
-// src/pages/Home.jsx
-import React, { useState, useEffect } from 'react'
-import { Canvas } from '@react-three/fiber'
+// src/pages/Projects.jsx
+import React, { useState, useEffect, useRef } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { Layer, Connections } from '../components/NeuralNetwork'
 
@@ -47,11 +47,55 @@ function generateWeights() {
   return Array(100).fill().map(() => Array(6).fill().map(() => Math.random()))
 }
 
+// 🎬 Petit composant pour animer le group
+function AnimatedNetwork({ letterBitmap, outputLayer, highlightIndex, weights }) {
+  const groupRef = useRef()
+
+  useFrame((state, delta) => {
+    if (!groupRef.current) return
+    groupRef.current.rotation.y += delta * 0.1
+    groupRef.current.rotation.x += delta * 0.05
+  })
+
+  return (
+    <group ref={groupRef} scale={0.7}>
+      {/* Grille d'entrée */}
+      <Layer
+        data={letterBitmap}
+        position={[0, -SCALE * 10, 0]}
+        spacing={SPACING}
+        size={CUBE_SIZE}
+      />
+
+      {/* Sortie : 6 neurones */}
+      <Layer
+        data={outputLayer}
+        position={[0, SCALE * 10, 0]}
+        spacing={SPACING}
+        size={CUBE_SIZE}
+        highlightIndex={highlightIndex}
+        isOutput={true}
+      />
+
+      {/* Connexions dynamiques */}
+      <Connections
+        from={letterBitmap}
+        to={outputLayer}
+        fromY={-SCALE * 10}
+        toY={SCALE * 10}
+        spacing={SPACING}
+        weights={weights}
+      />
+    </group>
+  )
+}
+
 export default function Projects() {
   const [frame, setFrame] = useState(0)
   const [weights] = useState(generateWeights)
 
-  const isMobile = window.innerWidth < 768
+  const isMobile =
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -65,51 +109,68 @@ export default function Projects() {
   const highlightIndex = OUTPUT_LETTERS.findIndex(l => l === currentLetter)
   const outputLayer = [Array(6).fill(1)]
 
-
-
- 
   return (
-    <>
-      <Canvas
-        style={{ width: '100vw', height: '100vh' }}
-        camera={{ position: [0, 500, isMobile ? 300 : 200], fov: 50 }}
-      >
-        <ambientLight intensity={1} />
-        <OrbitControls enableZoom={false} enablePan={false} />
+    <div className="projects-page">
+      {/* === PROJET 1 : Réseau de neurones HOFFMANN === */}
+      <div className="project-row">
+        {/* Colonne 1 : texte explicatif */}
+        <div className="info-panel">
+          <h1>Custom neural network</h1>
+<div className="info-panel">
 
-        {/* Grille d'entrée */}
-        <Layer
-          data={letterBitmap}
-          position={[0, -SCALE * 10, 0]}
-          spacing={SPACING}
-          size={CUBE_SIZE}
-        />
+  <p>
+    A minimalist and interactive 3D visualization of a tiny neural network trained to 
+    recognize the letters of my name: <strong>HOFFMANN</strong>.
+  </p>
 
-        {/* Sortie : 6 neurones */}
-        <Layer
-          data={outputLayer}
-          position={[0, SCALE * 10, 0]}
-          spacing={SPACING}
-          size={CUBE_SIZE}
-          highlightIndex={highlightIndex}
-          isOutput={true}
-        />
+  <p>
+    The 10×10 input grid shows the active pixels of the current letter,
+    while the upper layer displays 6 output neurons — one for each 
+    possible character (H, O, F, M, A, N).
+  </p>
 
-        {/* Connexions dynamiques */}
-        <Connections
-          from={letterBitmap}
-          to={outputLayer}
-          fromY={-SCALE * 10}
-          toY={SCALE * 10}
-          spacing={SPACING}
-          weights={weights}
-        />
-      </Canvas>
+  <p>
+    The network cycles through all letters and highlights the neuron 
+    activated at each step.
+  </p>
 
-      <div className="overlay">
-        <span className="letter">{currentLetter}</span>
+  <h3>Tools used</h3>
+  <ul>
+    <li>React & React Three Fiber</li>
+    <li>Three.js for 3D rendering</li>
+    <li>Custom bitmap dataset (10×10 letters)</li>
+    <li>Animated weight connections</li>
+  </ul>
+
+  <h3>Inspired by</h3>
+  <ul>
+    <li>3Blue1Brown — <em>Neural Networks</em> series</li>
+    <li>3Blue1Brown — <em>What is a neural network?</em></li>
+  </ul>
+</div>
+
+        </div>
+
+        {/* Colonne 2 : objet 3D */}
+        <div className="canvas-panel">
+          <Canvas
+            style={{ width: '100%', height: '200%' }}
+            camera={{ position: [0, 500, isMobile ? 350 : 260], fov: 23 }}
+          >
+            <ambientLight intensity={1} />
+            <OrbitControls enableZoom={false} enablePan={false} />
+
+            <AnimatedNetwork
+              letterBitmap={letterBitmap}
+              outputLayer={outputLayer}
+              highlightIndex={highlightIndex}
+              weights={weights}
+            />
+          </Canvas>
+        </div>
       </div>
-    </>
+
+      {/* Tu pourras rajouter d'autres projets ici en recopiant project-row */}
+    </div>
   )
 }
-
