@@ -110,67 +110,61 @@ export default function Projects() {
   const outputLayer = [Array(6).fill(1)]
 
   return (
-    <div className="projects-page">
-      {/* === PROJET 1 : Réseau de neurones HOFFMANN === */}
-      <div className="project-row">
-        {/* Colonne 1 : texte explicatif */}
-        <div className="info-panel">
-          <h1>Custom neural network</h1>
-<div className="info-panel">
+  <div className="projects-page">
+    <div className="project-row project-row-neural">
+      {/* Objet 3D au-dessus */}
+      <div className="canvas-panel">
+        <Canvas
+          style={{ width: '100%', height: '100%' }}
+          camera={{ position: [0, 500, isMobile ? 350 : 260], fov: 23 }}
+        >
+          <ambientLight intensity={1} />
+          <OrbitControls enableZoom={false} enablePan={false} />
 
-  <p>
-    A minimalist and interactive 3D visualization of a tiny neural network trained to 
-    recognize the letters of my name: <strong>HOFFMANN</strong>.
-  </p>
-
-  <p>
-    The 10×10 input grid shows the active pixels of the current letter,
-    while the upper layer displays 6 output neurons — one for each 
-    possible character (H, O, F, M, A, N).
-  </p>
-
-  <p>
-    The network cycles through all letters and highlights the neuron 
-    activated at each step.
-  </p>
-
-  <h3>Tools used</h3>
-  <ul>
-    <li>React & React Three Fiber</li>
-    <li>Three.js for 3D rendering</li>
-    <li>Custom bitmap dataset (10×10 letters)</li>
-    <li>Animated weight connections</li>
-  </ul>
-
-  <h3>Inspired by</h3>
-  <ul>
-    <li>3Blue1Brown — <em>Neural Networks</em> series</li>
-    <li>3Blue1Brown — <em>What is a neural network?</em></li>
-  </ul>
-</div>
-
-        </div>
-
-        {/* Colonne 2 : objet 3D */}
-        <div className="canvas-panel">
-          <Canvas
-            style={{ width: '100%', height: '200%' }}
-            camera={{ position: [0, 500, isMobile ? 350 : 260], fov: 23 }}
-          >
-            <ambientLight intensity={1} />
-            <OrbitControls enableZoom={false} enablePan={false} />
-
-            <AnimatedNetwork
-              letterBitmap={letterBitmap}
-              outputLayer={outputLayer}
-              highlightIndex={highlightIndex}
-              weights={weights}
-            />
-          </Canvas>
-        </div>
+          <AnimatedNetwork
+            letterBitmap={letterBitmap}
+            outputLayer={outputLayer}
+            highlightIndex={highlightIndex}
+            weights={weights}
+          />
+        </Canvas>
       </div>
 
-      {/* Tu pourras rajouter d'autres projets ici en recopiant project-row */}
+      {/* Texte en dessous */}
+      <div className="info-panel">
+        <h1>Custom neural network</h1>
+
+        <p>
+          A minimalist and interactive 3D visualization of a tiny neural network trained to
+          recognize the letters of my name: <strong>HOFFMANN</strong>.
+        </p>
+
+        <p>
+          The 10×10 input grid shows the active pixels of the current letter,
+          while the upper layer displays 6 output neurons — one for each
+          possible character (H, O, F, M, A, N).
+        </p>
+
+        <p>
+          The network cycles through all letters and highlights the neuron
+          activated at each step.
+        </p>
+
+        <h3>Tools used</h3>
+        <ul>
+          <li>React & React Three Fiber</li>
+          <li>Three.js for 3D rendering</li>
+          <li>Custom bitmap dataset 10×10 letters</li>
+          <li>Animated weight connections</li>
+        </ul>
+
+        <h3>Inspired by</h3>
+        <ul>
+          <li>3Blue1Brown — <em>Neural Networks</em> series</li>
+          <li>3Blue1Brown — <em>What is a neural network?</em></li>
+        </ul>
+      </div>
     </div>
-  )
+  </div>
+)
 }

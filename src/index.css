@@ -103,6 +103,30 @@ nav a.active {
   margin-top: 1rem;
 }
 
+/* About page layout */
+.about-page {
+  font-family: 'Press Start 2P', monospace;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 80px;
+  gap: 60px;
+}
+
+.about-portrait {
+  width: 180px;
+  height: auto;
+  display: block;
+}
+
+.typewriter-text {
+  font-size: 28px;
+  line-height: 2em;
+  text-align: left;
+  white-space: pre-wrap;
+  max-width: 900px;
+}
+
 /* Scrollable sections below canvas */
 .section-scroll {
   padding: 4rem 2rem;
@@ -152,10 +176,12 @@ nav a.active {
   display: grid;
   grid-template-columns: 1fr 1fr;  /* 2 colonnes */
   align-items: center;             /* alignement vertical parfait */
-  gap: 3rem;
-  width: 100%;
+    /* further lower the 3D block so it doesn't overlap the intro text */
+    margin-top: -7rem; /* increased to push the brain much lower on phones */
+    transform: translateY(8vh);
+    position: relative;
+    z-index: 1;
 }
-
 /* Colonne texte */
 .project-text {
   display: flex;
@@ -177,7 +203,11 @@ nav a.active {
 /* Colonne 3D */
 .project-3d {
   width: 100%;
-  height: 3000px;   /* Hauteur fixe, identique sur tous les projets */
+  /* Use a viewport-relative height instead of a huge fixed value so canvases
+     scale naturally on phones and tablets. Keep reasonable min/max limits. */
+  height: 80vh;
+  min-height: 360px;
+  max-height: 1200px;
   border-radius: 12px;
   overflow: hidden;
 }
@@ -189,6 +219,368 @@ nav a.active {
   }
 
   .project-3d {
-    height: 3000px;
+    /* reduce for tablet / small laptop */
+    height: 70vh;
+    min-height: 320px;
+  }
+}
+
+/* Mobile specific tweaks */
+@media (max-width: 600px) {
+  .projects-page {
+    padding: 2rem;
+    gap: 3rem;
+  }
+
+  .project-text h2 {
+    font-size: 1.4rem;
+  }
+
+  .project-text p {
+    font-size: 0.95rem;
+    max-width: 100%;
+  }
+
+  .project-3d {
+    /* tighter height on phones so the 3D view stays visible without huge scroll */
+    height: 55vh;
+    min-height: 220px;
+    /* push the 3D block further down on small screens so it no longer overlaps the header text */
+    margin-top: 8rem;
+    transform: translateY(18vh);
+    position: relative;
+    z-index: 100;
+  }
+
+  .canvas-wrapper {
+    margin-top: 80px;
+    height: calc(60vh - 60px);
+  }
+
+  .info-card {
+    /* move card to bottom on small screens to avoid overlapping the canvas */
+    top: auto;
+    right: 0.5rem;
+    bottom: 0.6rem;
+    left: 0.5rem;
+    max-width: unset;
+    display: flex;
+    justify-content: center;
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  nav {
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .text-pixel {
+    font-size: 12px;
+  }
+
+  /* About page mobile adjustments */
+  .about-page {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    gap: 18px;
+  }
+
+  .about-portrait {
+    width: 120px;
+    margin-bottom: 6px;
+  }
+
+  .typewriter-text {
+    font-size: 14px;
+    line-height: 1.4;
+    text-align: center;
+    max-width: 100%;
+  }
+
+  /* Ensure the text/info panel appears above the 3D canvas on small screens */
+  .info-panel {
+    position: relative;
+    z-index: 20;
+    padding-bottom: 0.5rem;
+  }
+
+  .info-panel h1 {
+    font-size: 1rem;
+    line-height: 1.02;
+    margin-bottom: 0.3rem;
+  }
+
+  .info-panel p {
+    font-size: 0.85rem;
+  }
+}
+
+/* Home.css */
+
+.home-page {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-text {
+  position: relative;
+  z-index: 10;
+  max-width: 350px;
+  margin-left: 5%;
+  margin-top: 60px;
+  margin-bottom: 20px;
+}
+
+.home-text h1 {
+  font-size: 50px;
+  font-weight: 900;
+  line-height: 1;
+  margin: 0;
+}
+
+.home-canvas-wrapper {
+  width: 100%;
+  height: calc(100vh - 230px);
+  position: relative;
+  margin-top: 0;
+}
+
+.brain-card {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-width: 240px;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+}
+
+.brain-card h4 {
+  margin: 0 0 6px 0;
+  color: #333;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.brain-card p {
+  margin: 0;
+  font-size: 0.9em;
+  color: #555;
+}
+
+@media (max-width: 600px) {
+  .home-text {
+    margin-left: 20px;
+    margin-top: 35px;
+    margin-bottom: 20px;
+    max-width: 290px;
+  }
+
+  .home-text h1 {
+    font-size: 38px;
+    line-height: 0.95;
+  }
+
+  .home-canvas-wrapper {
+    height: 360px;
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .home-page .brain-card {
+    display: block;
+    max-width: 180px;
+    padding: 10px 12px;
+    z-index: 2000;
+  }
+
+  .home-page .brain-card h4 {
+    font-size: 0.9rem;
+  }
+
+  .home-page .brain-card p {
+    font-size: 0.75rem;
+  }
+}
+
+.contact-page {
+  padding: 2rem;
+  text-align: center;
+}
+
+.contact-text {
+  font-size: 1rem;
+}
+
+.contact-email {
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.contact-canvas {
+  margin-top: 5rem;
+  background: white;
+  display: block;
+  margin-inline: auto;
+}
+
+.restart-button {
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-family: 'Press Start 2P', monospace;
+  background-color: #ff69b4;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+}
+
+.jump-text {
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  .contact-page {
+    padding: 1rem;
+  }
+
+  .contact-email {
+    font-size: 0.75rem;
+    word-break: break-word;
+  }
+
+  .contact-canvas {
+    margin-top: 4rem;
+    width: 100% !important;
+    max-width: 300px !important;
+  }
+
+  .restart-button {
+    font-size: 0.7rem;
+  }
+
+  .jump-text {
+    font-size: 0.8rem;
+  }
+}
+
+
+.mobile-controls {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-controls {
+    display: grid;
+    grid-template-columns: 70px 70px 70px;
+    grid-template-rows: 52px 52px 52px;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    margin: 24px auto 0;
+    width: fit-content;
+  }
+
+  .mobile-controls button {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    padding: 0;
+    width: 70px;
+    height: 52px;
+    background-color: #ff69b4;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    touch-action: none;
+  }
+
+  .mobile-controls button:active {
+    transform: scale(0.95);
+  }
+
+  .mobile-controls .btn-up {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .mobile-controls .btn-left {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .mobile-controls .btn-right {
+    grid-column: 3;
+    grid-row: 2;
+  }
+
+  .mobile-controls .btn-down {
+    grid-column: 2;
+    grid-row: 3;
+  }
+}
+
+.mobile-controls {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-controls {
+    display: grid;
+    grid-template-columns: 70px 70px 70px;
+    grid-template-rows: 52px 52px 52px;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    margin: 24px auto 0;
+    width: fit-content;
+  }
+
+  .mobile-controls button {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    padding: 0;
+    width: 70px;
+    height: 52px;
+    background-color: #ff69b4;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    touch-action: none;
+  }
+
+  .mobile-controls button:active {
+    transform: scale(0.95);
+  }
+
+  .mobile-controls .btn-up {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .mobile-controls .btn-left {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .mobile-controls .btn-right {
+    grid-column: 3;
+    grid-row: 2;
+  }
+
+  .mobile-controls .btn-down {
+    grid-column: 2;
+    grid-row: 3;
   }
 }

@@ -7,6 +7,13 @@ export default function GamePage() {
   const gameRef = useRef(null);
   const [panel, setPanel] = useState(null);
 
+  const mobileControls = useRef({
+    left: false,
+    right: false,
+    up: false,
+    down: false,
+  });
+
   useEffect(() => {
     if (gameRef.current || !containerRef.current) return;
 
@@ -207,10 +214,25 @@ const ZONES = [
         const v = this.speed;
         b.setVelocity(0);
 
-        const left  = this.cursors.left.isDown  || this.keys.Q.isDown;
-        const right = this.cursors.right.isDown || this.keys.D.isDown;
-        const up    = this.cursors.up.isDown    || this.keys.Z.isDown;
-        const down  = this.cursors.down.isDown  || this.keys.S.isDown;
+        const left =
+          this.cursors.left.isDown ||
+          this.keys.Q.isDown ||
+          mobileControls.current.left;
+
+        const right =
+          this.cursors.right.isDown ||
+          this.keys.D.isDown ||
+          mobileControls.current.right;
+
+        const up =
+          this.cursors.up.isDown ||
+          this.keys.Z.isDown ||
+          mobileControls.current.up;
+
+        const down =
+          this.cursors.down.isDown ||
+          this.keys.S.isDown ||
+          mobileControls.current.down;
 
         if (left)  { b.setVelocityX(-v); this.player.anims.play("left", true); this.facing = "left"; }
         else if (right) { b.setVelocityX(v); this.player.anims.play("right", true); this.facing = "right"; }
@@ -420,6 +442,14 @@ const ZONES = [
     };
   }, []);
 
+  const press = (direction) => {
+    mobileControls.current[direction] = true;
+  };
+
+  const release = (direction) => {
+    mobileControls.current[direction] = false;
+  };
+
  return (
   <>
     <div style={{ background: "#ffffffff", minHeight: "100vh", padding: "24px 0" }}>
@@ -437,6 +467,52 @@ const ZONES = [
       {/* <<< FIN AJOUT >>> */}
 
       <div ref={containerRef} />
+
+      <div className="mobile-controls">
+        <button
+          className="btn-up"
+          onPointerDown={() => press("up")}
+          onPointerUp={() => release("up")}
+          onPointerLeave={() => release("up")}
+          onPointerCancel={() => release("up")}
+          onTouchEnd={() => release("up")}
+        >
+          ▲
+        </button>
+
+        <button
+          className="btn-left"
+          onPointerDown={() => press("left")}
+          onPointerUp={() => release("left")}
+          onPointerLeave={() => release("left")}
+          onPointerCancel={() => release("left")}
+          onTouchEnd={() => release("left")}
+        >
+          ◀
+        </button>
+
+        <button
+          className="btn-right"
+          onPointerDown={() => press("right")}
+          onPointerUp={() => release("right")}
+          onPointerLeave={() => release("right")}
+          onPointerCancel={() => release("right")}
+          onTouchEnd={() => release("right")}
+        >
+          ▶
+        </button>
+
+        <button
+          className="btn-down"
+          onPointerDown={() => press("down")}
+          onPointerUp={() => release("down")}
+          onPointerLeave={() => release("down")}
+          onPointerCancel={() => release("down")}
+          onTouchEnd={() => release("down")}
+        >
+          ▼
+        </button>
+      </div>
     </div>
 
     {panel && (

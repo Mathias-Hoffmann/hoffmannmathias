@@ -5,7 +5,6 @@ const CANVAS_WIDTH = 500
 const CANVAS_HEIGHT = 180
 const GROUND_Y = 140
 
-
 export default function Contact() {
   const canvasRef = useRef(null)
   const [shouldRestart, setShouldRestart] = useState(false)
@@ -16,14 +15,19 @@ export default function Contact() {
     const ctx = canvas.getContext('2d')
 
     const scale = window.devicePixelRatio || 1
+
     canvas.width = CANVAS_WIDTH * scale
     canvas.height = CANVAS_HEIGHT * scale
-    canvas.style.width = `${CANVAS_WIDTH}px`
-    canvas.style.height = `${CANVAS_HEIGHT}px`
-    canvas.style.border = "4px solid #000";
-    canvas.style.borderRadius = "12px";
-    canvas.style.boxShadow = "8px 8px 0 #000"; // ombre derrière le canvas
-    canvas.style.imageRendering = "pixelated";
+
+    canvas.style.width = '100%'
+    canvas.style.maxWidth = `${CANVAS_WIDTH}px`
+    canvas.style.height = 'auto'
+    canvas.style.aspectRatio = `${CANVAS_WIDTH} / ${CANVAS_HEIGHT}`
+    canvas.style.border = '4px solid #000'
+    canvas.style.borderRadius = '12px'
+    canvas.style.boxShadow = '8px 8px 0 #000'
+    canvas.style.imageRendering = 'pixelated'
+
     ctx.scale(scale, scale)
 
     let brain = { x: 50, y: GROUND_Y, width: 20, height: 20, vy: 0, jumping: false }
@@ -32,6 +36,7 @@ export default function Contact() {
     let frame = 0
     let gameOver = false
     let currentLetterIndex = 0
+    let animationId
 
     function spawnObstacle() {
       const letter = PHRASE[currentLetterIndex % PHRASE.length]
@@ -40,7 +45,7 @@ export default function Contact() {
         y: GROUND_Y,
         width: 20,
         height: 20,
-        letter
+        letter,
       })
       currentLetterIndex++
     }
@@ -64,28 +69,23 @@ export default function Contact() {
       frame++
       ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
 
-      // Sol
       ctx.fillStyle = '#aaa'
       ctx.fillRect(0, GROUND_Y + 5, CANVAS_WIDTH, 5)
 
-      // Gravity / saut
       brain.y += brain.vy
       brain.vy += 1.2
+
       if (brain.y >= GROUND_Y) {
         brain.y = GROUND_Y
         brain.vy = 0
         brain.jumping = false
       }
 
-
-      // Spawn lettres
       if (frame % 90 === 0) spawnObstacle()
 
-      // Move lettres
-      obstacles.forEach(o => o.x -= 3)
+      obstacles.forEach(o => (o.x -= 3))
       obstacles = obstacles.filter(o => o.x + o.width > 0)
 
-      // Collision
       obstacles.forEach(o => {
         if (
           o.x < brain.x + brain.width &&
@@ -100,7 +100,6 @@ export default function Contact() {
       drawBrain()
       drawObstacles()
 
-      // Score
       score++
       ctx.fillStyle = 'black'
       ctx.font = '12px monospace'
@@ -109,10 +108,9 @@ export default function Contact() {
       if (gameOver) {
         ctx.fillStyle = 'rgba(255, 107, 181, 1)'
         ctx.font = '14px "Press Start 2P", monospace'
-
         ctx.fillText('GAME OVER', CANVAS_WIDTH / 2 - 60, GROUND_Y - 40)
       } else {
-        requestAnimationFrame(update)
+        animationId = requestAnimationFrame(update)
       }
     }
 
@@ -123,37 +121,49 @@ export default function Contact() {
       }
     }
 
-    const handleKeydown = (e) => {
+    const handleKeydown = e => {
       if (e.code === 'Space') jump()
     }
 
+    const handlePointerOrTouch = e => {
+      const target = e.target || e.srcElement
+
+      if (
+        target &&
+        (target.tagName === 'BUTTON' ||
+          (target.closest && target.closest('button')))
+      ) {
+        return
+      }
+
+      if ((window.innerWidth || document.documentElement.clientWidth) <= 768) {
+        jump()
+      }
+    }
+
     document.addEventListener('keydown', handleKeydown)
+    document.addEventListener('pointerdown', handlePointerOrTouch)
+    document.addEventListener('touchstart', handlePointerOrTouch)
+
     update()
 
     return () => {
+      cancelAnimationFrame(animationId)
       document.removeEventListener('keydown', handleKeydown)
+      document.removeEventListener('pointerdown', handlePointerOrTouch)
+      document.removeEventListener('touchstart', handlePointerOrTouch)
     }
   }, [shouldRestart])
 
   return (
-    <main style={{ padding: '2rem', textAlign: 'center' }}>
-      
-      <p style={{ fontSize: '1rem' }}>You can contact me by mail :</p>
+    <main className="contact-page">
+      <p className="contact-text">You can contact me by mail :</p>
 
-      <h2 style={{ marginTop: '0.5rem', fontSize: '1.1rem' }}>
+      <h2 className="contact-email">
         mathias.hoffmann@imt-atlantique.net
       </h2>
 
-      <canvas
-        ref={canvasRef}
-        style={{
-          border: '2px solid black',
-          marginTop: '5rem',
-          background: 'white',
-          display: 'block',
-          marginInline: 'auto',
-        }}
-      />
+      <canvas ref={canvasRef} className="contact-canvas" />
 
       {isGameOver && (
         <button
@@ -161,89 +171,15 @@ export default function Contact() {
             setShouldRestart(prev => !prev)
             setIsGameOver(false)
           }}
-          style={{
-            marginTop: '1rem',
-            padding: '0.6rem 1.2rem',
-            fontSize: '1rem',
-            fontFamily: '"Press Start 2P", monospace',
-            backgroundColor: '#ff69b4',
-            border: 'none',
-            borderRadius: '6px',
-            color: 'white',
-            cursor: 'pointer'
-            
-          }}
+          className="restart-button"
         >
           Restart
         </button>
       )}
-      
-      <p style={{ marginTop: '0.5rem' }}>
+
+      <p className="jump-text">
         Press the <b>space bar</b> to jump!
       </p>
     </main>
   )
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

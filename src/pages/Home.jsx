@@ -1,5 +1,4 @@
-//home page
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import BrainModel from '../components/BrainModel'
@@ -9,12 +8,23 @@ export default function Home() {
   const [selectedPart, setSelectedPart] = useState('Brain_Part_06')
   const [cardPosition, setCardPosition] = useState({ x: 900, y: 80 })
   const [selectedRoute, setSelectedRoute] = useState(null)
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 600)
+
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 600)
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const cardData = {
     Brain_Part_06: {
       title: 'Home',
-      description: 'Select a other part to navigate.',
+      description: 'Select another part to navigate.',
       route: '/home',
     },
     Brain_Part_05: {
@@ -29,7 +39,7 @@ export default function Home() {
     },
     Brain_Part_04: {
       title: 'Projects',
-      description: 'Here Some projects I made.',
+      description: 'Here are some projects I made.',
       route: '/',
     },
   }
@@ -37,77 +47,50 @@ export default function Home() {
   const currentCard = cardData[selectedPart]
 
   return (
-    <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-      {/* Texte fixe à gauche */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '5%',
-          left: '5%',
-          transform: 'translateY(-50%)',
-          zIndex: 10,
-          maxWidth: '350px',
-        }}
-      >
-        <h1 style={{ fontSize: '50px', fontWeight: '900', lineHeight: '1' }}>
-          Select
-        </h1>
-        <h1 style={{ fontSize: '50px', fontWeight: '900', lineHeight: '1' }}>
-          a other part
-        </h1>
-        <h1 style={{ fontSize: '50px', fontWeight: '900', lineHeight: '1' }}>
-          to navigate
-        </h1>
-
+    <div className="home-page">
+      <div className="home-text">
+        <h1>Select</h1>
+        <h1>another part</h1>
+        <h1>to navigate</h1>
       </div>
 
-      {/* Zone Canvas */}
-      <div className="canvas-wrapper">
+      <div className="canvas-wrapper home-canvas-wrapper">
         <Canvas camera={{ position: [2.45, -0.15, 1.6], fov: 45 }}>
           <ambientLight intensity={0.1} />
           <directionalLight position={[0, 0, 5]} />
+
           <BrainModel
             selectedPart={selectedPart}
             setSelectedPart={setSelectedPart}
             setCardPosition={setCardPosition}
             setSelectedRoute={setSelectedRoute}
           />
+
           <OrbitControls />
         </Canvas>
 
-        {/* Carte dynamique sur clic/survol */}
         {currentCard && (
           <div
-            style={{
-              position: 'absolute',
-              top: cardPosition.y,
-              left: cardPosition.x,
-              backgroundColor: '#fff',
-              border: '1px solid #ccc',
-              borderRadius: '12px',
-              padding: '12px 16px',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-              zIndex: 1000,
-              maxWidth: '240px',
-              pointerEvents: 'auto',
-              transform: 'translate(-50%, -50%)',
-            }}
+            className="brain-card"
+            style={
+              isMobile
+                ? {
+                    position: 'absolute',
+                    left: '50%',
+                    bottom: '15px',
+                    top: 'auto',
+                    transform: 'translateX(-50%)',
+                  }
+                : {
+                    top: cardPosition.y,
+                    left: cardPosition.x,
+                  }
+            }
           >
-            <h4
-              onClick={() => navigate(currentCard.route)}
-              style={{
-                margin: 0,
-                marginBottom: '6px',
-                color: '#333',
-                textDecoration: 'underline',
-                cursor: 'pointer',
-              }}
-            >
+            <h4 onClick={() => navigate(currentCard.route)}>
               {currentCard.title}
             </h4>
-            <p style={{ margin: 0, fontSize: '0.9em', color: '#555' }}>
-              {currentCard.description}
-            </p>
+            <p>{currentCard.description}</p>
           </div>
         )}
       </div>
