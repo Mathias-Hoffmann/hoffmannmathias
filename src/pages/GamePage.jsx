@@ -264,7 +264,7 @@ const ZONES = [
         this.placeMode = false;//ACTIVER/DESACTIVER PLACEMENT
         this.dragStart = null;
         this.draftZonesNative = [];
-        this.showGrid = flase; //ACTIVER/DESACTIVER GRILLE
+        this.showGrid = false; //ACTIVER/DESACTIVER GRILLE
 
         this.placeG = this.add.graphics().setDepth(50);
         this.persistG = this.add.graphics().setDepth(49);
