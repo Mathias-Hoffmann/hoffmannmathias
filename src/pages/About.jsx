@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import usePageMusic from '../hooks/usePageMusic';
+
+
 
 // Composant effet machine à écrire
 function Typewriter({ text, color = "#000000", speed = 50, className = "" }) {
@@ -23,6 +26,7 @@ function Typewriter({ text, color = "#000000", speed = 50, className = "" }) {
 }
 
 export default function About() {
+  usePageMusic('about.mp3')
   const introText =
     "Hi, I’m a French computer engineering student, with a strong interest in cognitive science. If you want to know more about me go to Game page.";
 

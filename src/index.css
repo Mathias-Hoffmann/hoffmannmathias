@@ -65,8 +65,9 @@ nav {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  padding: 1rem 2rem;
+  padding: 1rem 1rem;
   background: white;
+  margin-bottom: 0;
 
   font-family: 'League Spartan', sans-serif;
   font-weight: 900;

@@ -1,6 +1,7 @@
 // src/pages/GamePage.jsx
 import React, { useEffect, useRef, useState } from "react";
 import Phaser from "phaser";
+import usePageMusic from '../hooks/usePageMusic';
 
 export default function GamePage() {
   const containerRef = useRef(null);
@@ -13,6 +14,8 @@ export default function GamePage() {
     up: false,
     down: false,
   });
+
+  usePageMusic('gamepage.mp3')
 
   useEffect(() => {
     if (gameRef.current || !containerRef.current) return;
@@ -413,20 +416,28 @@ const ZONES = [
     const game = new Phaser.Game(config);
     gameRef.current = game;
 
-    const fitOneThird = () => {
-      const canvas = game.canvas;
-      if (!canvas) return;
-      const targetW = window.innerWidth / 1.08;
-      const scale = targetW / BASE_W;
-      canvas.style.width = `${BASE_W * scale}px`;
-      canvas.style.height = `${BASE_H * scale}px`;
-      canvas.style.display = "block";
-      canvas.style.margin = "0 auto";
-      canvas.style.border = "4px solid #fff";
-      canvas.style.borderRadius = "12px";
-      canvas.style.boxShadow = "8px 8px 0 #fff";
-      canvas.style.imageRendering = "pixelated";
-    };
+const fitOneThird = () => {
+  const canvas = game.canvas;
+  if (!canvas) return;
+
+  const isMobile = window.innerWidth < 768;
+
+  const targetW = isMobile
+    ? window.innerWidth / 1.08   // garde mobile pareil
+    : Math.min(window.innerWidth * 0.78, 1250); // desktop plus compact
+
+  const scale = targetW / BASE_W;
+
+  canvas.style.width = `${BASE_W * scale}px`;
+  canvas.style.height = `${BASE_H * scale}px`;
+  canvas.style.display = "block";
+  canvas.style.margin = isMobile ? "0 auto" : "-8px auto 0";
+  canvas.style.border = "2px solid #fff";
+  canvas.style.borderRadius = "8px";
+  canvas.style.boxShadow = "4px 4px 0 #fff";
+  canvas.style.imageRendering = "pixelated";
+  canvas.style.marginTop = "-51px";
+};
 
     fitOneThird();
     window.addEventListener("resize", fitOneThird);
@@ -452,7 +463,16 @@ const ZONES = [
 
  return (
   <>
-    <div style={{ background: "#ffffffff", minHeight: "100vh", padding: "24px 0" }}>
+    <div style={{
+  background: "#ffffffff",
+  height: "calc(100vh)",
+  overflow: "hidden",
+  paddingTop: "0px",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "flex-start"
+}}>
 
       {/* <<< AJOUT ICI >>> */}
       <div style={{
@@ -460,7 +480,8 @@ const ZONES = [
         fontFamily: "Press Start 2P, monospace",
         fontSize: "12px",
         color: "rgba(255, 107, 181, 1)",
-        marginBottom: "12px"
+        marginBottom: "1px",
+        marginTop: "1px",
       }}>
         Use the arrow keys to move
       </div>
