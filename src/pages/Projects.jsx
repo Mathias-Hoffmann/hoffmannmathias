@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { Layer, Connections } from '../components/NeuralNetwork'
+import usePageMusic from '../hooks/usePageMusic';
 
 const SCALE = 10
 const CUBE_SIZE = SCALE * 0.5
@@ -93,6 +94,7 @@ function AnimatedNetwork({ letterBitmap, outputLayer, highlightIndex, weights })
 export default function Projects() {
   const [frame, setFrame] = useState(0)
   const [weights] = useState(generateWeights)
+  usePageMusic('projects.mp3')
 
   const isMobile =
     typeof window !== 'undefined' ? window.innerWidth < 768 : false

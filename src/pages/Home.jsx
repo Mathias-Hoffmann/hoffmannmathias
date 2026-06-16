@@ -3,15 +3,27 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import BrainModel from '../components/BrainModel'
 import { useNavigate } from 'react-router-dom'
+import usePageMusic from '../hooks/usePageMusic';
+
+
+
+
+
+
+
+
+
+
 
 export default function Home() {
   const [selectedPart, setSelectedPart] = useState('Brain_Part_06')
   const [cardPosition, setCardPosition] = useState({ x: 900, y: 80 })
   const [selectedRoute, setSelectedRoute] = useState(null)
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 600)
+  usePageMusic('home.mp3')
 
   const navigate = useNavigate()
-
+  
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 600)

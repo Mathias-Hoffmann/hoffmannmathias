@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react'
+import usePageMusic from '../hooks/usePageMusic';
 
 const PHRASE = 'mathias.hoffmann@imt-atlantique.net'.split('')
-const CANVAS_WIDTH = 500
+const CANVAS_WIDTH = 500 
 const CANVAS_HEIGHT = 180
 const GROUND_Y = 140
 
@@ -9,6 +10,8 @@ export default function Contact() {
   const canvasRef = useRef(null)
   const [shouldRestart, setShouldRestart] = useState(false)
   const [isGameOver, setIsGameOver] = useState(false)
+
+  const musicRef = usePageMusic('contact.mp3')
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -93,6 +96,11 @@ export default function Contact() {
           brain.y >= o.y - o.height
         ) {
           gameOver = true
+
+          if (musicRef.current) {
+            musicRef.current.pause()
+          }
+
           setIsGameOver(true)
         }
       })
@@ -168,6 +176,13 @@ export default function Contact() {
       {isGameOver && (
         <button
           onClick={() => {
+
+            if (musicRef.current) {
+              musicRef.current.currentTime = 0
+
+              musicRef.current.play().catch(() => {})
+            }
+
             setShouldRestart(prev => !prev)
             setIsGameOver(false)
           }}

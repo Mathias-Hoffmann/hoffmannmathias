@@ -1,6 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-
+import { musicController } from "../hooks/usePageMusic";
+import { useState } from "react";
 
 
 
@@ -20,5 +21,8 @@ export default function Navbar() {
     </nav>
   )
 }
+
+
+
 
 
