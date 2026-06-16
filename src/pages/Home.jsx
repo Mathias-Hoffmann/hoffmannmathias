@@ -40,7 +40,7 @@ export default function Home() {
     Brain_Part_04: {
       title: 'Projects',
       description: 'Here are some projects I made.',
-      route: '/',
+      route: '/projects',
     },
   }
 

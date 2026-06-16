@@ -257,145 +257,145 @@ const ZONES = [
         }
       }
 
-      /* ====================== OUTIL DE PLACEMENT ====================== */
+      // /* ====================== OUTIL DE PLACEMENT ====================== */
 
-      initPlacementTool(PLACE_GRID) {
-        this.PLACE_GRID = PLACE_GRID;
-        this.placeMode = true;
-        this.dragStart = null;
-        this.draftZonesNative = [];
-        this.showGrid = true;
+      // initPlacementTool(PLACE_GRID) {
+      //   this.PLACE_GRID = PLACE_GRID;
+      //   this.placeMode = true;
+      //   this.dragStart = null;
+      //   this.draftZonesNative = [];
+      //   this.showGrid = true;
 
-        this.placeG = this.add.graphics().setDepth(50);
-        this.persistG = this.add.graphics().setDepth(49);
-        this.gridG = this.add.graphics().setDepth(40);
-        this.labelTexts = [];
+      //   this.placeG = this.add.graphics().setDepth(50);
+      //   this.persistG = this.add.graphics().setDepth(49);
+      //   this.gridG = this.add.graphics().setDepth(40);
+      //   this.labelTexts = [];
 
-        this.hud = this.add.text(12, 40,
-          "P: place  |  E: export  |  U: undo  |  C: clear  |  G: grid",
-          { fontFamily: "monospace", fontSize: "14px", color: "#fff" }
-        ).setScrollFactor(0).setDepth(60);
+      //   this.hud = this.add.text(12, 40,
+      //     "P: place  |  E: export  |  U: undo  |  C: clear  |  G: grid",
+      //     { fontFamily: "monospace", fontSize: "14px", color: "#fff" }
+      //   ).setScrollFactor(0).setDepth(60);
 
-        this.modeText = this.add.text(12, 60, "Place: OFF",
-          { fontFamily: "monospace", fontSize: "14px", color: "#ff4f81" }
-        ).setScrollFactor(0).setDepth(60);
+      //   this.modeText = this.add.text(12, 60, "Place: OFF",
+      //     { fontFamily: "monospace", fontSize: "14px", color: "#ff4f81" }
+      //   ).setScrollFactor(0).setDepth(60);
 
-        this.drawGrid();
+      //   this.drawGrid();
 
-        this.input.on("pointerdown", (p) => {
-          if (!this.placeMode) return;
-          const { nx, ny } = this.toNative(p.worldX, p.worldY);
-          this.dragStart = { x: this.snap(nx), y: this.snap(ny) };
-        });
+      //   this.input.on("pointerdown", (p) => {
+      //     if (!this.placeMode) return;
+      //     const { nx, ny } = this.toNative(p.worldX, p.worldY);
+      //     this.dragStart = { x: this.snap(nx), y: this.snap(ny) };
+      //   });
 
-        this.input.on("pointermove", (p) => {
-          if (!this.placeMode || !this.dragStart) return;
-          const { nx, ny } = this.toNative(p.worldX, p.worldY);
-          const end = { x: this.snap(nx), y: this.snap(ny) };
-          const r = this.normRect(this.dragStart, end);
-          this.drawGuide(r);
-        });
+      //   this.input.on("pointermove", (p) => {
+      //     if (!this.placeMode || !this.dragStart) return;
+      //     const { nx, ny } = this.toNative(p.worldX, p.worldY);
+      //     const end = { x: this.snap(nx), y: this.snap(ny) };
+      //     const r = this.normRect(this.dragStart, end);
+      //     this.drawGuide(r);
+      //   });
 
-        this.input.on("pointerup", (p) => {
-          if (!this.placeMode || !this.dragStart) return;
-          const { nx, ny } = this.toNative(p.worldX, p.worldY);
-          const end = { x: this.snap(nx), y: this.snap(ny) };
-          const r = this.normRect(this.dragStart, end);
-          this.dragStart = null;
-          this.placeG.clear();
-          if (r.w > 0 && r.h > 0) {
-            this.draftZonesNative.push(r);
-            this.drawPersist();
-          }
-        });
+      //   this.input.on("pointerup", (p) => {
+      //     if (!this.placeMode || !this.dragStart) return;
+      //     const { nx, ny } = this.toNative(p.worldX, p.worldY);
+      //     const end = { x: this.snap(nx), y: this.snap(ny) };
+      //     const r = this.normRect(this.dragStart, end);
+      //     this.dragStart = null;
+      //     this.placeG.clear();
+      //     if (r.w > 0 && r.h > 0) {
+      //       this.draftZonesNative.push(r);
+      //       this.drawPersist();
+      //     }
+      //   });
 
-        this.input.keyboard.on("keydown-P", () => {
-          this.placeMode = !this.placeMode;
-          this.modeText.setText(`Place: ${this.placeMode ? "ON" : "OFF"}`);
-        });
-        this.input.keyboard.on("keydown-U", () => {
-          if (this.draftZonesNative.length) {
-            this.draftZonesNative.pop();
-            this.drawPersist();
-          }
-        });
-        this.input.keyboard.on("keydown-C", () => {
-          this.draftZonesNative = [];
-          this.drawPersist();
-        });
-        this.input.keyboard.on("keydown-G", () => {
-          this.showGrid = !this.showGrid;
-          this.drawGrid();
-        });
-        this.input.keyboard.on("keydown-E", () => this.exportZones());
-      }
+      //   this.input.keyboard.on("keydown-P", () => {
+      //     this.placeMode = !this.placeMode;
+      //     this.modeText.setText(`Place: ${this.placeMode ? "ON" : "OFF"}`);
+      //   });
+      //   this.input.keyboard.on("keydown-U", () => {
+      //     if (this.draftZonesNative.length) {
+      //       this.draftZonesNative.pop();
+      //       this.drawPersist();
+      //     }
+      //   });
+      //   this.input.keyboard.on("keydown-C", () => {
+      //     this.draftZonesNative = [];
+      //     this.drawPersist();
+      //   });
+      //   this.input.keyboard.on("keydown-G", () => {
+      //     this.showGrid = !this.showGrid;
+      //     this.drawGrid();
+      //   });
+      //   this.input.keyboard.on("keydown-E", () => this.exportZones());
+      // }
 
-      toNative(x, y) {
-        return {
-          nx: (x - this.viewOffsetX) / this.viewScale,
-          ny: (y - this.viewOffsetY) / this.viewScale,
-        };
-      }
-      snap(n) { return Math.round(n / this.PLACE_GRID) * this.PLACE_GRID; }
-      normRect(a, b) {
-        const x = Math.min(a.x, b.x);
-        const y = Math.min(a.y, b.y);
-        const w = Math.abs(a.x - b.x);
-        const h = Math.abs(a.y - b.y);
-        return { x, y, w, h };
-      }
+      // toNative(x, y) {
+      //   return {
+      //     nx: (x - this.viewOffsetX) / this.viewScale,
+      //     ny: (y - this.viewOffsetY) / this.viewScale,
+      //   };
+      // }
+      // snap(n) { return Math.round(n / this.PLACE_GRID) * this.PLACE_GRID; }
+      // normRect(a, b) {
+      //   const x = Math.min(a.x, b.x);
+      //   const y = Math.min(a.y, b.y);
+      //   const w = Math.abs(a.x - b.x);
+      //   const h = Math.abs(a.y - b.y);
+      //   return { x, y, w, h };
+      // }
 
-      drawGuide(r) {
-        const s = this.viewScale, ox = this.viewOffsetX, oy = this.viewOffsetY;
-        this.placeG.clear();
-        this.placeG.lineStyle(2, 0xff4f81, 1).strokeRect(ox + r.x * s, oy + r.y * s, r.w * s, r.h * s);
-      }
+      // drawGuide(r) {
+      //   const s = this.viewScale, ox = this.viewOffsetX, oy = this.viewOffsetY;
+      //   this.placeG.clear();
+      //   this.placeG.lineStyle(2, 0xff4f81, 1).strokeRect(ox + r.x * s, oy + r.y * s, r.w * s, r.h * s);
+      // }
 
-      drawPersist() {
-        const s = this.viewScale, ox = this.viewOffsetX, oy = this.viewOffsetY;
-        this.persistG.clear();
-        this.persistG.lineStyle(2, 0xff4f81, 1);
-        // détruire les anciens labels
-        this.labelTexts.forEach(t => t.destroy());
-        this.labelTexts = [];
-        this.draftZonesNative.forEach((r, i) => {
-          this.persistG.strokeRect(ox + r.x * s, oy + r.y * s, r.w * s, r.h * s);
-          this.persistG.fillStyle(0xff4f81, 0.08).fillRect(ox + r.x * s, oy + r.y * s, r.w * s, r.h * s);
-          const lbl = this.add.text(ox + (r.x + 4) * s, oy + (r.y + 4) * s, `#${i + 1}`, {
-            fontFamily: "monospace", fontSize: `${12 * s}px`, color: "#ff4f81"
-          }).setDepth(51);
-          this.labelTexts.push(lbl);
-        });
-      }
+      // drawPersist() {
+      //   const s = this.viewScale, ox = this.viewOffsetX, oy = this.viewOffsetY;
+      //   this.persistG.clear();
+      //   this.persistG.lineStyle(2, 0xff4f81, 1);
+      //   // détruire les anciens labels
+      //   this.labelTexts.forEach(t => t.destroy());
+      //   this.labelTexts = [];
+      //   this.draftZonesNative.forEach((r, i) => {
+      //     this.persistG.strokeRect(ox + r.x * s, oy + r.y * s, r.w * s, r.h * s);
+      //     this.persistG.fillStyle(0xff4f81, 0.08).fillRect(ox + r.x * s, oy + r.y * s, r.w * s, r.h * s);
+      //     const lbl = this.add.text(ox + (r.x + 4) * s, oy + (r.y + 4) * s, `#${i + 1}`, {
+      //       fontFamily: "monospace", fontSize: `${12 * s}px`, color: "#ff4f81"
+      //     }).setDepth(51);
+      //     this.labelTexts.push(lbl);
+      //   });
+      // }
 
-      drawGrid() {
-        const s = this.viewScale, ox = this.viewOffsetX, oy = this.viewOffsetY;
-        this.gridG.clear();
-        if (!this.showGrid) return;
-        this.gridG.lineStyle(1, 0x666666, 0.2);
-        for (let x = 0; x <= BASE_W; x += this.PLACE_GRID) {
-          this.gridG.lineBetween(ox + x * s, oy, ox + x * s, oy + BASE_H * s);
-        }
-        for (let y = 0; y <= BASE_H; y += this.PLACE_GRID) {
-          this.gridG.lineBetween(ox, oy + y * s, ox + BASE_W * s, oy + BASE_H * s);
-        }
-      }
+      // drawGrid() {
+      //   const s = this.viewScale, ox = this.viewOffsetX, oy = this.viewOffsetY;
+      //   this.gridG.clear();
+      //   if (!this.showGrid) return;
+      //   this.gridG.lineStyle(1, 0x666666, 0.2);
+      //   for (let x = 0; x <= BASE_W; x += this.PLACE_GRID) {
+      //     this.gridG.lineBetween(ox + x * s, oy, ox + x * s, oy + BASE_H * s);
+      //   }
+      //   for (let y = 0; y <= BASE_H; y += this.PLACE_GRID) {
+      //     this.gridG.lineBetween(ox, oy + y * s, ox + BASE_W * s, oy + BASE_H * s);
+      //   }
+      // }
 
-      exportZones() {
-        const lines = this.draftZonesNative.map((r, i) =>
-          `  { id: "zone-${i + 1}", x: ${Math.round(r.x)}, y: ${Math.round(r.y)}, w: ${Math.round(r.w)}, h: ${Math.round(r.h)}, title: "", content: "" },`
-        );
-        const out = `const ZONES = [\n${lines.join("\n")}\n];`;
-        console.clear();
-        console.log(out);
-        if (navigator.clipboard?.writeText) {
-          navigator.clipboard.writeText(out);
-        }
-        this.add.text(12, 80, "ZONES copiées dans le presse-papiers ✔", {
-          fontFamily: "monospace", fontSize: "14px", color: "#8aff8a"
-        }).setScrollFactor(0).setDepth(60).setAlpha(1);
-      }
-      /* ==================== FIN OUTIL DE PLACEMENT ==================== */
+      // exportZones() {
+      //   const lines = this.draftZonesNative.map((r, i) =>
+      //     `  { id: "zone-${i + 1}", x: ${Math.round(r.x)}, y: ${Math.round(r.y)}, w: ${Math.round(r.w)}, h: ${Math.round(r.h)}, title: "", content: "" },`
+      //   );
+      //   const out = `const ZONES = [\n${lines.join("\n")}\n];`;
+      //   console.clear();
+      //   console.log(out);
+      //   if (navigator.clipboard?.writeText) {
+      //     navigator.clipboard.writeText(out);
+      //   }
+      //   this.add.text(12, 80, "ZONES copiées dans le presse-papiers ✔", {
+      //     fontFamily: "monospace", fontSize: "14px", color: "#8aff8a"
+      //   }).setScrollFactor(0).setDepth(60).setAlpha(1);
+      // }
+      // /* ==================== FIN OUTIL DE PLACEMENT ==================== */
     }
 
     const config = {
@@ -416,7 +416,7 @@ const ZONES = [
     const fitOneThird = () => {
       const canvas = game.canvas;
       if (!canvas) return;
-      const targetW = window.innerWidth / 1.5;
+      const targetW = window.innerWidth / 1.08;
       const scale = targetW / BASE_W;
       canvas.style.width = `${BASE_W * scale}px`;
       canvas.style.height = `${BASE_H * scale}px`;
